@@ -100,7 +100,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     },
     {
       title: 'Master E-Book (28 Ch)',
-      desc: 'Complete, unabridged 28-chapter textbook covering all topics from aboutness and PRECIS to modern transformer embeddings, downloadable as Markdown.',
+      desc: 'Complete, unabridged 28-chapter textbook covering all topics from aboutness and PRECIS to modern transformer embeddings, downloadable as Markdown or a print-ready A6 PDF.',
       icon: Download,
       tab: 'ebook',
       cta: 'Read & Download Textbook',

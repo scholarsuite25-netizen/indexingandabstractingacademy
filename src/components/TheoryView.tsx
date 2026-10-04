@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sparkles, CheckCircle2, Loader2, Award, BookOpen, RotateCcw } from 'lucide-react';
 import { THEORY_QUESTIONS, TheoryQuestionItem } from '../data/theoryQuestions';
 import { RichText } from './RichText';
+import { apiFetch } from '../../lib/apiClient';
 
 
 
@@ -71,7 +72,7 @@ export const TheoryView: React.FC<TheoryViewProps> = () => {
     setGradingLoading(prev => ({ ...prev, [q.id]: true }));
 
     try {
-      const res = await fetch('/api/ai-tutor', {
+      const res = await apiFetch('/api/ai-tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

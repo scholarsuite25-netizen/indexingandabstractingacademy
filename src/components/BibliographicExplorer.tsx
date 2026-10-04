@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Globe, BookOpen, ExternalLink, Loader2, Database, ShieldCheck, Sparkles, AlertTriangle, RotateCcw } from 'lucide-react';
+import { apiFetch } from '../../lib/apiClient';
 
 interface BibliographicExplorerProps {
   darkMode: boolean;
@@ -69,7 +70,7 @@ export const BibliographicExplorer: React.FC<BibliographicExplorerProps> = () =>
         }
       } else if (searchSource === 'arxiv') {
         // arXiv API
-        const res = await fetch(`/api/arxiv?q=${encodeURIComponent(query)}&max=5`, {
+        const res = await apiFetch(`/api/arxiv?q=${encodeURIComponent(query)}&max=5`, {
           signal: controller.signal
         });
         if (!res.ok) {

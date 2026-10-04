@@ -1,6 +1,12 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { HomeDashboard } from './components/HomeDashboard';
+import { AccessGate } from './components/AccessGate';
+import {
+  ACCESS_STORAGE_KEY,
+  isValidAccessCode,
+  storeAccessCode,
+} from '../lib/access';
 import { Footer } from './components/Footer';
 import { FloatingContact } from './components/FloatingContact';
 import { BookmarkItem } from './data/courseData';
@@ -31,6 +37,14 @@ const BookmarksProgressView = React.lazy(() =>
   import('./components/BookmarksProgressView').then(m => ({ default: m.BookmarksProgressView })));
 
 export default function App() {
+  const [accessCode, setAccessCode] = useState<string | null>(() => {
+    try {
+      const saved = localStorage.getItem(ACCESS_STORAGE_KEY);
+      return saved && isValidAccessCode(saved) ? saved : null;
+    } catch {
+      return null;
+    }
+  });
   const [activeTab, setActiveTab] = useState<string>('home');
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -95,6 +109,20 @@ export default function App() {
   const removeBookmark = (id: string) => {
     setBookmarks(prev => prev.filter(b => b.id !== id));
   };
+
+  // Access gate: nothing renders until the visitor enters the
+  // shared course code (remembered on this device afterwards).
+  if (!accessCode) {
+    return (
+      <AccessGate
+        darkMode={darkMode}
+        onUnlock={(code) => {
+          storeAccessCode(code);
+          setAccessCode(code);
+        }}
+      />
+    );
+  }
 
   return (
     <div className={`min-h-screen transition-colors duration-200 flex flex-col bg-surface text-ink`}>

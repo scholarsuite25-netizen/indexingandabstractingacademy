@@ -1,8 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { fetchArxivXml, sanitizeArxivParams } from '../lib/arxiv.js';
+import { hasValidAccessCode } from '../lib/access.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (!hasValidAccessCode(req.headers as Record<string, unknown>)) {
+      return res.status(401).json({ error: 'Valid access code required' });
+    }
     const { q, max } = sanitizeArxivParams(String(req.query.q || ''), req.query.max);
     if (!q.trim()) {
       return res.status(400).json({ error: 'Missing q parameter' });

@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { askTutor } from '../lib/gemini.js';
+import { hasValidAccessCode } from '../lib/access.js';
 
 const MAX_PROMPT_CHARS = 4000;
 const MAX_CONTEXT_CHARS = 500;
@@ -30,6 +31,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const contentType = String(req.headers['content-type'] || '');
   if (!contentType.includes('application/json')) {
     return res.status(415).json({ error: 'Expected application/json body' });
+  }
+  if (!hasValidAccessCode(req.headers as Record<string, unknown>)) {
+    return res.status(401).json({ error: 'Valid access code required' });
   }
 
   const forwarded = req.headers['x-forwarded-for'];

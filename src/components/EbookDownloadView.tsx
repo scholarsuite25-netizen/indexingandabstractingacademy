@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Search, ChevronRight, ChevronLeft, Bookmark, BookmarkCheck, Sparkles, Type, Download, Printer, SearchX } from 'lucide-react';
+import { BookOpen, Search, ChevronRight, ChevronLeft, Bookmark, BookmarkCheck, Sparkles, Type, Download, Printer, SearchX, FileDown, Loader2 } from 'lucide-react';
 import { BookmarkItem } from '../data/courseData';
 import { BOOK_CHAPTERS } from '../data/bookChapters';
 import { RichText } from './RichText';
+import { buildTextbookPdf } from '../utils/textbookPdf';
 
 interface EbookDownloadViewProps {
   darkMode: boolean;
@@ -16,6 +17,34 @@ export const EbookDownloadView: React.FC<EbookDownloadViewProps> = ({ darkMode, 
   const [bookmarkedChapters, setBookmarkedChapters] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
+  const [pdfBusy, setPdfBusy] = useState(false);
+
+  const notify = (msg: string) => {
+    setDownloadNotice(msg);
+    setTimeout(() => setDownloadNotice(null), 4000);
+  };
+
+  const handleDownloadPdf = async () => {
+    if (pdfBusy) return;
+    setPdfBusy(true);
+    try {
+      const blob = await buildTextbookPdf();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'LIS_814_Indexing_and_Abstracting_Textbook_A6.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      notify('A6 PDF textbook downloaded!');
+    } catch (err) {
+      console.error('PDF build failed', err);
+      notify('PDF generation failed — please try again.');
+    } finally {
+      setPdfBusy(false);
+    }
+  };
 
   const handleDownloadTextbook = () => {
     const formattedChapters = chapters.map(ch => {
@@ -136,7 +165,7 @@ Compiled: ${new Date().toLocaleDateString()}
               Indexing &amp; Abstracting <span className="text-accent-600">Master Textbook</span>
             </h1>
             <p className="text-sm font-medium text-ink-muted max-w-prose">
-              Read online exclusively. Enhanced with ANSI/NISO standards, PRECIS role operators, Cranfield evaluation methodologies, and AI digital indexing frameworks across all 28 chapters.
+              Read online exclusively. Enhanced with ANSI/NISO standards, PRECIS role operators, Cranfield evaluation methodologies, and AI digital indexing frameworks across all 28 chapters. Download as Markdown or a print-ready A6 PDF.
             </p>
           </div>
 
@@ -181,6 +210,21 @@ Compiled: ${new Date().toLocaleDateString()}
             >
               <Download className="w-4 h-4" aria-hidden="true" />
               <span>Download (.md)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={pdfBusy}
+              className="flex items-center space-x-1.5 rounded-full bg-navy-900 text-white font-bold px-5 py-2.5 min-h-11 hover:bg-navy-800 transition-all shadow-sm text-xs disabled:opacity-60 disabled:cursor-not-allowed"
+              title="Download the complete textbook as an A6 (105 x 148 mm) PDF"
+            >
+              {pdfBusy ? (
+                <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <FileDown className="w-4 h-4" aria-hidden="true" />
+              )}
+              <span>{pdfBusy ? 'Building PDF…' : 'Download (PDF · A6)'}</span>
             </button>
 
             <button

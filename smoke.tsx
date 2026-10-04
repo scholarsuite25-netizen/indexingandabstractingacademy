@@ -16,6 +16,7 @@ import { AiTutorView } from './src/components/AiTutorView';
 import { EbookDownloadView } from './src/components/EbookDownloadView';
 import { BookmarksProgressView } from './src/components/BookmarksProgressView';
 import { FacilitatorView } from './src/components/FacilitatorView';
+import { AccessGate } from './src/components/AccessGate';
 import { MCQ_TOTAL, FLASHCARD_TOTAL, MCQ_COUNTS_BY_MODULE, FLASHCARD_COUNTS_BY_MODULE } from './src/data/counts';
 import { MCQ_QUESTIONS } from './src/data/mcqQuestions';
 import { FLASHCARDS } from './src/data/flashcards';
@@ -39,6 +40,7 @@ const cases: Array<[string, () => string]> = [
   ['EbookDownloadView', () => renderToString(React.createElement(EbookDownloadView, { darkMode: false }))],
   ['BookmarksProgressView', () => renderToString(React.createElement(BookmarksProgressView, { bookmarks: [], removeBookmark: noop, setActiveTab: noop, setSelectedModuleId: noop, darkMode: false }))],
   ['FacilitatorView', () => renderToString(React.createElement(FacilitatorView, { darkMode: false, setActiveTab: noop }))],
+  ['AccessGate', () => renderToString(React.createElement(AccessGate, { darkMode: false, onUnlock: noop }))],
 ];
 
 let failures = 0;

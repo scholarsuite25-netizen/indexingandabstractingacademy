@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, Loader2, FileText, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
+import { apiFetch } from '../../lib/apiClient';
 
 interface SandboxViewProps {
   darkMode: boolean;
@@ -51,7 +52,7 @@ export const SandboxView: React.FC<SandboxViewProps> = () => {
     const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
-      const res = await fetch('/api/ai-tutor', {
+      const res = await apiFetch('/api/ai-tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

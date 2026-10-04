@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Send, Bot, User, Loader2, AlertTriangle, RotateCcw } from 'lucide-react';
 import { COURSE_MODULES } from '../data/courseData';
+import { apiFetch } from '../../lib/apiClient';
 
 interface AiTutorViewProps {
   darkMode: boolean;
@@ -67,7 +68,7 @@ export const AiTutorView: React.FC<AiTutorViewProps> = () => {
     const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
-      const res = await fetch('/api/ai-tutor', {
+      const res = await apiFetch('/api/ai-tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
