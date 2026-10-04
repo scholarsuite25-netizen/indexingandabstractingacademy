@@ -38,34 +38,45 @@ const noKeyNote = (userPrompt: string, contextTopic: string) =>
 const errorFallback =
   'Based on LIS 814 principles (ANSI/NISO Z39.19 and Z39.14 standards), effective indexing and abstracting requires balancing exhaustivity and specificity. Precision measures relevant retrieved items, while recall measures completeness across document collections.';
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function askTutor(userPrompt: string, contextTopic: string): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return noKeyNote(userPrompt, contextTopic);
   }
 
-  try {
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
+  const ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      },
+    },
+  });
+
+  // Retry transient upstream failures (503 high demand, 429 rate limits, 5xx)
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: MODEL,
+        contents: buildContents(userPrompt, contextTopic),
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          temperature: 0.2,
         },
-      },
-    });
-
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: buildContents(userPrompt, contextTopic),
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.2,
-      },
-    });
-
-    return response.text || 'No response generated.';
-  } catch (error) {
-    console.error('AI error:', error);
-    return errorFallback;
+      });
+      return response.text || 'No response generated.';
+    } catch (error) {
+      const status = (error as { status?: number })?.status;
+      const retriable = status === 503 || status === 429 || (typeof status === 'number' && status >= 500);
+      if (attempt < 2 && retriable) {
+        await sleep(1500 * (attempt + 1));
+        continue;
+      }
+      console.error('AI error:', error);
+      return errorFallback;
+    }
   }
+  return errorFallback;
 }
