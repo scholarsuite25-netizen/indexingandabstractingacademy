@@ -1,20 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { HomeDashboard } from './components/HomeDashboard';
-import { FacilitatorView } from './components/FacilitatorView';
-import { LecturesView } from './components/LecturesView';
-import { ReadingsView } from './components/ReadingsView';
-import { McqView } from './components/McqView';
-import { FlashcardsView } from './components/FlashcardsView';
-import { TheoryView } from './components/TheoryView';
-import { SandboxView } from './components/SandboxView';
-import { BibliographicExplorer } from './components/BibliographicExplorer';
-import { AiTutorView } from './components/AiTutorView';
-import { EbookDownloadView } from './components/EbookDownloadView';
-import { BookmarksProgressView } from './components/BookmarksProgressView';
 import { Footer } from './components/Footer';
 import { FloatingContact } from './components/FloatingContact';
 import { BookmarkItem } from './data/courseData';
+
+// Code-split heavy views (question banks, textbook, tools) so the initial
+// bundle stays small; Navbar/HomeDashboard use src/data/counts.ts instead.
+const FacilitatorView = React.lazy(() =>
+  import('./components/FacilitatorView').then(m => ({ default: m.FacilitatorView })));
+const LecturesView = React.lazy(() =>
+  import('./components/LecturesView').then(m => ({ default: m.LecturesView })));
+const ReadingsView = React.lazy(() =>
+  import('./components/ReadingsView').then(m => ({ default: m.ReadingsView })));
+const McqView = React.lazy(() =>
+  import('./components/McqView').then(m => ({ default: m.McqView })));
+const FlashcardsView = React.lazy(() =>
+  import('./components/FlashcardsView').then(m => ({ default: m.FlashcardsView })));
+const TheoryView = React.lazy(() =>
+  import('./components/TheoryView').then(m => ({ default: m.TheoryView })));
+const SandboxView = React.lazy(() =>
+  import('./components/SandboxView').then(m => ({ default: m.SandboxView })));
+const BibliographicExplorer = React.lazy(() =>
+  import('./components/BibliographicExplorer').then(m => ({ default: m.BibliographicExplorer })));
+const AiTutorView = React.lazy(() =>
+  import('./components/AiTutorView').then(m => ({ default: m.AiTutorView })));
+const EbookDownloadView = React.lazy(() =>
+  import('./components/EbookDownloadView').then(m => ({ default: m.EbookDownloadView })));
+const BookmarksProgressView = React.lazy(() =>
+  import('./components/BookmarksProgressView').then(m => ({ default: m.BookmarksProgressView })));
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -101,6 +115,13 @@ export default function App() {
       />
 
       <main id="main" tabIndex={-1} className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+        <Suspense
+          fallback={
+            <div className="py-24 text-center text-ink/60" role="status">
+              Loading…
+            </div>
+          }
+        >
         {activeTab === 'home' && (
           <HomeDashboard
             setActiveTab={setActiveTab}
@@ -169,6 +190,7 @@ export default function App() {
             darkMode={darkMode}
           />
         )}
+        </Suspense>
       </main>
 
       {/* Academic Multi-Column Footer */}

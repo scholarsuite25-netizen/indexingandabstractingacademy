@@ -21,8 +21,7 @@ import {
   Phone,
   UserCheck
 } from 'lucide-react';
-import { MCQ_QUESTIONS } from '../data/mcqQuestions';
-import { FLASHCARDS } from '../data/flashcards';
+import { MCQ_TOTAL, FLASHCARD_TOTAL } from '../data/counts';
 
 interface NavbarProps {
   activeTab: string;
@@ -112,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'facilitator', label: 'Facilitator', icon: UserCheck, title: 'Profile of the Facilitator: Dr. Uzoamaka Ogwo (Ph.D)' },
     { id: 'lectures', label: 'Lectures', icon: BookOpen },
     { id: 'readings', label: 'Readings', icon: FileText },
-    { id: 'mcqs', label: `MCQs (${MCQ_QUESTIONS.length})`, icon: HelpCircle },
+    { id: 'mcqs', label: `MCQs (${MCQ_TOTAL})`, icon: HelpCircle },
     { id: 'flashcards', label: 'Flashcards', icon: Layers },
     { id: 'theory', label: 'Theory', icon: FileText }
   ];
@@ -348,8 +347,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { id: 'mcqs', label: `${MCQ_QUESTIONS.length} MCQs`, icon: HelpCircle },
-                    { id: 'flashcards', label: `${FLASHCARDS.length} Flashcards`, icon: Layers }
+                    { id: 'mcqs', label: `${MCQ_TOTAL} MCQs`, icon: HelpCircle },
+                    { id: 'flashcards', label: `${FLASHCARD_TOTAL} Flashcards`, icon: Layers }
                   ].map(item => {
                     const Icon = item.icon;
                     const isActive = activeTab === item.id;

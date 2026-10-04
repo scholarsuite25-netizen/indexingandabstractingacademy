@@ -16,6 +16,9 @@ import { AiTutorView } from './src/components/AiTutorView';
 import { EbookDownloadView } from './src/components/EbookDownloadView';
 import { BookmarksProgressView } from './src/components/BookmarksProgressView';
 import { FacilitatorView } from './src/components/FacilitatorView';
+import { MCQ_TOTAL, FLASHCARD_TOTAL, MCQ_COUNTS_BY_MODULE, FLASHCARD_COUNTS_BY_MODULE } from './src/data/counts';
+import { MCQ_QUESTIONS } from './src/data/mcqQuestions';
+import { FLASHCARDS } from './src/data/flashcards';
 
 const noop = () => {};
 
@@ -55,3 +58,27 @@ for (const [name, run] of cases) {
   }
 }
 console.log(failures ? `\n${failures} issue(s)` : '\nAll renders passed');
+
+// src/data/counts.ts drives Navbar/HomeDashboard labels — must match the real banks.
+const countProblems: string[] = [];
+if (MCQ_TOTAL !== MCQ_QUESTIONS.length) {
+  countProblems.push(`MCQ_TOTAL ${MCQ_TOTAL} != ${MCQ_QUESTIONS.length}`);
+}
+if (FLASHCARD_TOTAL !== FLASHCARDS.length) {
+  countProblems.push(`FLASHCARD_TOTAL ${FLASHCARD_TOTAL} != ${FLASHCARDS.length}`);
+}
+for (const [mod, n] of Object.entries(MCQ_COUNTS_BY_MODULE)) {
+  const actual = MCQ_QUESTIONS.filter(q => q.module.startsWith(`Module ${mod}:`)).length;
+  if (actual !== n) countProblems.push(`MCQ Module ${mod}: counts.ts ${n} != ${actual}`);
+}
+for (const [mod, n] of Object.entries(FLASHCARD_COUNTS_BY_MODULE)) {
+  const actual = FLASHCARDS.filter(f => f.module === `Module ${mod}`).length;
+  if (actual !== n) countProblems.push(`Flashcard Module ${mod}: counts.ts ${n} != ${actual}`);
+}
+if (countProblems.length) {
+  failures++;
+  console.log(`FAIL  counts -> ${countProblems.join('; ')}`);
+} else {
+  console.log('OK    counts   (totals + per-module match data)');
+}
+if (failures) process.exitCode = 1;

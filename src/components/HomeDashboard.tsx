@@ -17,8 +17,7 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { COURSE_MODULES } from '../data/courseData';
-import { MCQ_QUESTIONS } from '../data/mcqQuestions';
-import { FLASHCARDS } from '../data/flashcards';
+import { MCQ_TOTAL, FLASHCARD_TOTAL, MCQ_COUNTS_BY_MODULE, FLASHCARD_COUNTS_BY_MODULE } from '../data/counts';
 import { DiagramFigure } from './diagrams/registry';
 
 interface HomeDashboardProps {
@@ -33,12 +32,12 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   setSelectedModuleId
 }) => {
   const totalLectures = COURSE_MODULES.reduce((sum, m) => sum + m.lectures.length, 0);
-  const totalMcqs = MCQ_QUESTIONS.length;
-  const totalCards = FLASHCARDS.length;
+  const totalMcqs = MCQ_TOTAL;
+  const totalCards = FLASHCARD_TOTAL;
   const mcqCountFor = (mod: (typeof COURSE_MODULES)[number]) =>
-    MCQ_QUESTIONS.filter(q => q.module.startsWith(`Module ${mod.number}:`)).length;
+    MCQ_COUNTS_BY_MODULE[mod.number] ?? 0;
   const cardCountFor = (mod: (typeof COURSE_MODULES)[number]) =>
-    FLASHCARDS.filter(f => f.module === `Module ${mod.number}`).length;
+    FLASHCARD_COUNTS_BY_MODULE[mod.number] ?? 0;
 
   const stats = [
     { value: `${COURSE_MODULES.length}`, label: 'Study Modules' },

@@ -5,7 +5,7 @@
   "outputDirectory": "dist",
   "functions": {
     "api/ai-tutor.ts": {
-      "maxDuration": 30
+      "maxDuration": 60
     },
     "api/arxiv.ts": {
       "maxDuration": 30
