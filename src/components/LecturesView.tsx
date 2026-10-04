@@ -11,6 +11,7 @@ import {
   SearchX
 } from 'lucide-react';
 import { COURSE_MODULES, BookmarkItem } from '../data/courseData';
+import { DiagramFigure } from './diagrams/registry';
 
 interface LecturesViewProps {
   selectedModuleId: string | null;
@@ -421,6 +422,9 @@ export const LecturesView: React.FC<LecturesViewProps> = ({
                   </p>
                 ))}
               </div>
+
+              {/* Concept Diagram */}
+              {activeLecture.diagramId && <DiagramFigure id={activeLecture.diagramId} />}
 
               {/* Key Takeaways Box */}
               <div className="p-6 rounded-2xl border border-line bg-panel-2 space-y-4">

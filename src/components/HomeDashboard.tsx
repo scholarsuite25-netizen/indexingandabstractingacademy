@@ -17,8 +17,9 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { COURSE_MODULES } from '../data/courseData';
-import { MCQ_QUESTIONS } from './McqView';
-import { FLASHCARDS } from './FlashcardsView';
+import { MCQ_QUESTIONS } from '../data/mcqQuestions';
+import { FLASHCARDS } from '../data/flashcards';
+import { DiagramFigure } from './diagrams/registry';
 
 interface HomeDashboardProps {
   setActiveTab: (tab: string) => void;
@@ -188,6 +189,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Course concept map */}
+        <div className="relative z-10 px-8 sm:px-12 pb-10">
+          <DiagramFigure id="home-hero" />
         </div>
       </section>
 

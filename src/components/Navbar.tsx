@@ -21,8 +21,8 @@ import {
   Phone,
   UserCheck
 } from 'lucide-react';
-import { MCQ_QUESTIONS } from './McqView';
-import { FLASHCARDS } from './FlashcardsView';
+import { MCQ_QUESTIONS } from '../data/mcqQuestions';
+import { FLASHCARDS } from '../data/flashcards';
 
 interface NavbarProps {
   activeTab: string;
