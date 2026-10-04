@@ -85,7 +85,7 @@ export const AccessGate: React.FC<AccessGateProps> = ({
                   setCode(e.target.value);
                   setError(false);
                 }}
-                placeholder="e.g. LIS814"
+                placeholder="Enter code"
                 aria-invalid={error}
                 aria-describedby={error ? 'access-error' : undefined}
                 className={`w-full px-4 py-3 rounded-xl border text-sm font-bold tracking-widest uppercase bg-panel text-ink placeholder-ink-muted focus:outline-none focus:ring-2 transition-all ${
