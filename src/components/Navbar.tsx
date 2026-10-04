@@ -262,10 +262,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Mobile Menu & Theme Trigger */}
-          <div className="flex items-center space-x-2 lg:hidden">
+          <div className="flex items-center space-x-2 xl:hidden">
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-xl bg-white/10 text-amber-300 border border-white/10"
+              className="lg:hidden p-2 rounded-xl bg-white/10 text-amber-300 border border-white/10"
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}

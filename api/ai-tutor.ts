@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { askTutor } from '../lib/gemini';
+import { askTutor } from '../lib/gemini.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const userPrompt = req.body?.prompt || req.body?.message || '';

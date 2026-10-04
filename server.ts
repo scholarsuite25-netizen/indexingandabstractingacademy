@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { askTutor } from './lib/gemini';
-import { fetchArxivXml, sanitizeArxivParams } from './lib/arxiv';
+import { askTutor } from './lib/gemini.js';
+import { fetchArxivXml, sanitizeArxivParams } from './lib/arxiv.js';
 
 dotenv.config();
 
