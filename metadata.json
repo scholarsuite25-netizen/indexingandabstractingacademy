@@ -1,0 +1,8 @@
+{
+  "name": "Indexing \u0026 Abstracting Academy",
+  "description": "Comprehensive study platform for Indexing and Abstracting featuring lectures, study notes, supplemental readings, MCQs, flashcards, theory questions, and AI tutoring.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

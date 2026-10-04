@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/ai-tutor.ts": {
+      "maxDuration": 30
+    },
+    "api/arxiv.ts": {
+      "maxDuration": 30
+    }
+  }
+}
